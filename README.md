@@ -28,6 +28,10 @@
 
 # 工具使用
 
+部分的Linux 默认shell不是bash，比如我放到了kali里面执行了一下，就报错了。然后我echo $SHELL看了一下人家的默认shell是zsh，不是bash。
+
+所以我就把我的使用从./Centos7-等保测评辅助脚本.sh改成了sudo bash Centos7-等保测评辅助脚本.sh。
+
 ```
 sudo bash Centos7-等保测评辅助脚本.sh
 ```
