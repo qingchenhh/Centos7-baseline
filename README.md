@@ -29,7 +29,7 @@
 # 工具使用
 
 ```
-./Centos7-等保测评辅助脚本.sh
+sudo bash Centos7-等保测评辅助脚本.sh
 ```
 
 
