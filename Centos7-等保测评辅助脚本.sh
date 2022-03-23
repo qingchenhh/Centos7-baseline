@@ -585,6 +585,8 @@ echo "==============ps -ef查看进程情况==============" >> ./res_config.log
 ps -ef 2>/dev/null >> ./res_config.log
 echo "==============端口监听情况==============" >> ./res_config.log
 netstat -ntlp 2>/dev/null >> ./res_config.log
+echo "==============所有端口情况==============" >> ./res_config.log
+netstat -anp 2>/dev/null >> ./res_config.log
 echo "==============/etc/hosts.deny==============" >> ./res_config.log
 cat /etc/hosts.deny 2>/dev/null >> ./res_config.log
 echo "==============/etc/hosts.allow==============" >> ./res_config.log
@@ -618,7 +620,7 @@ cat /etc/redhat-release 2>/dev/null >> ./res_config.log
 
 echo -e "\n\033[32m \033[1m"
 
-echo -e "\n\033[32m[+] 同时以上使用的原始内容保存了一份到当前目录下的res_config.log文件中，可以使用它和脚本的结果进行人工核对，记得下载！ \033[1m"
+echo -e "\n\033[32m[+] 以上使用的原始内容保存了一份到当前目录下的res_config.log文件中，可以使用它和脚本的结果进行人工核对，记得下载！ \033[1m"
 
 echo -e "\n\033[32m[+] 请核对以上结果！！！ \033[1m"
 
