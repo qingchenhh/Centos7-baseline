@@ -16,6 +16,7 @@ echo "当前系统内核版本：`uname -a`"
 echo "当前系统时间：$(date +"%Y-%m-%d %H:%M:%S")"
 echo "当前系统CPU使用情况：$(top -n 1 | \grep "%Cpu")"
 echo "当前系统内存使用情况：$(top -n 1 | \grep "Mem :")"
+echo "当前系统语言环境：$(echo $LANG)"
 
 if [ "$(echo $os_info | grep "您的系统可能不是Centos7")" != "$n" ];then
 	echo -e "\n\033[31m[-] 执行可能会报错! 关键是配置文件和部分服务名不同结果可能是错的！\n\033[0m"
@@ -24,15 +25,7 @@ if [ "$(echo $os_info | grep "您的系统可能不是Centos7")" != "$n" ];then
 fi
 
 # echo -e "\033[34m[*] 开始最基础的基线检查！\033[0m"
-
-# echo -e "\033[34m[*] 检查除root外uid为0的用户。\033[0m"
-echo -e "\n\033[34m[*] 身份鉴别 a)项 ==============\033[0m"
-
-id0=$(cat /etc/passwd | awk -F: '($3 == 0)&&($1 != "root") { print $1 }')
-for i in $id0;do
-	echo -e "\033[31m[-] 存在id为0的非root用户，用户名为$i。\033[0m"
-done
-
+echo -e "\033[34m[*] 检查是否存在危险的SUID程序。\033[0m"
 suid=$(find / -perm -u=s -type f 2>/dev/null)
 [ "$(echo $suid | grep '/ab ')" != "$n" ] && echo -e "\033[31m[-] 存在危险的SUID程序：ab。\033[0m"
 [ "$(echo $suid | grep '/agetty ')" != "$n" ] && echo -e "\033[31m[-] 存在危险的SUID程序：agetty。\033[0m"
@@ -99,8 +92,12 @@ suid=$(find / -perm -u=s -type f 2>/dev/null)
 [ "$(echo $suid | grep '/tclsh ')" != "$n" ] && echo -e "\033[31m[-] 存在危险的SUID程序：tclsh。\033[0m"
 [ "$(echo $suid | grep '/strings ')" != "$n" ] && echo -e "\033[31m[-] 存在危险的SUID程序：strings。\033[0m"
 
-
-
+echo -e "\n\033[34m[*] 身份鉴别 a)项 ==============\033[0m"
+# echo -e "\033[34m[*] 检查除root外uid为0的用户。\033[0m"
+id0=$(cat /etc/passwd | awk -F: '($3 == 0)&&($1 != "root") { print $1 }')
+for i in $id0;do
+	echo -e "\033[31m[-] 存在id为0的非root用户，用户名为$i。\033[0m"
+done
 
 # echo -e "\033[34m[*] ===============等保相关配置内容获取===============\033[0m"
 
