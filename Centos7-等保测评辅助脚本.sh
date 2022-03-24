@@ -16,7 +16,7 @@ echo "当前系统内核版本：`uname -a`"
 echo "当前系统时间：$(date +"%Y-%m-%d %H:%M:%S")"
 echo "当前系统CPU使用情况：$(top -n 1 | \grep "%Cpu")"
 echo "当前系统内存使用情况：$(top -n 1 | \grep "Mem :")"
-echo "当前系统语言环境：$(echo $LANG)"
+echo "当前系统语言环境：${LANG}"
 
 if [ "$(echo $os_info | grep "您的系统可能不是Centos7")" != "$n" ];then
 	echo -e "\n\033[31m[-] 执行可能会报错! 关键是配置文件和部分服务名不同结果可能是错的！\n\033[0m"
