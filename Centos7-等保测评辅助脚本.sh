@@ -277,12 +277,12 @@ telnet_port=$(netstat -an | grep ":23$")
 
 if [[ "$telnet_is_enabled" == "$n" ]]; then
 	if [ "$telnet" == "$n" ]; then
-		echo "2）经现场核查，系统没有开启telnet服务。"
+		echo "系统没有开启telnet服务。"
 	else
 		echo -e "\033[31m[-] 系统安装了telnet服务。\033[0m"
 
 		if [[ "$telnet_port" == "$n" ]]; then
-			echo "2）经现场核查，系统没有开启telnet服务。"
+			echo "系统没有开启telnet服务。"
 		fi
 	fi
 else
