@@ -271,13 +271,24 @@ fi
 
 # (systemctl status telnet.socket >& /dev/null) || echo "2）经现场核查，系统没有开启telnet服务。"
 
+telnet_is_enabled=$(systemctl list-unit-files | grep enabled | grep "telnet\.socket")
 telnet=$(rpm -qa | grep telnet*)
 telnet_port=$(netstat -an | grep ":23$")
-if [ "$telnet" == "$n" -a "$telnet_port" == "$n" ]; then
-	echo "系统没有开启telnet服务。"
+
+if [[ "$telnet_is_enabled" == "$n" ]]; then
+	if [ "$telnet" == "$n" ]; then
+		echo "2）经现场核查，系统没有开启telnet服务。"
+	else
+		echo -e "\033[31m[-] 系统安装了telnet服务。\033[0m"
+
+		if [[ "$telnet_port" == "$n" ]]; then
+			echo "2）经现场核查，系统没有开启telnet服务。"
+		fi
+	fi
 else
 	echo -e "\033[31m[-] 系统开启了telnet服务。\033[0m"
 fi
+
 
 echo -e "\n\033[34m[*] 身份鉴别 d)项 ==============\033[0m"
 echo -e "\033[33m[*] 请根据实际情况手工判断该项。 \033[0m"
@@ -335,6 +346,7 @@ echo ${login_user/'\n'/' '}
 
 echo -e "\n\033[34m[*] 访问控制 d)项 ==============\033[0m"
 echo -e "\033[33m[*] 请根据实际情况手工核查sudo权限是否分配合理,sudo权限配置如下：。 \033[0m"
+# grep -v ^$ /etc/sudoers | grep -v ^# | grep -v Defaults | grep -v "^root" | grep -v "^%wheel"
 grep -v ^$ /etc/sudoers | grep -v ^# | grep -v Defaults
 
 echo -e "\n\033[34m[*] 访问控制 e)项 ==============\033[0m"
