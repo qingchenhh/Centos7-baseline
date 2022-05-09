@@ -404,6 +404,8 @@ echo "最后20条audit.log文件内容如下:"
 tail -20 /var/log/audit/audit.log
 echo -e "\033[33m[*] 请根据核查系统时间与网络时间是否一直。 \033[0m"
 echo "当前系统时间：$(date +"%Y-%m-%d %H:%M:%S")"
+(ping time.tianqi.com -c 3 &>/dev/null) && (curl -H 'Accept-Language: zh-CN,zh;q=0.9,ko;q=0.8' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' time.tianqi.com 2>/dev/null | grep -o "北京现在时间：\(.*\)。查" | sed 's/。查//')
+
 info_syslog=$(grep "\*\.info;mail\.none;authpriv\.none;cron\.none" /etc/rsyslog.conf | grep -v ^#)
 [ "$info_syslog" == "$n" ] && echo -e "\033[33m[*] rsyslog.conf配置的日志信息不足够详细。缺少*.info;mail.none;authpriv.none;cron.none /var/log/messages的配置(人工核查)。\033[0m"
 
@@ -441,7 +443,11 @@ fi
 echo -e "\n\033[34m[*] 入侵防范 a)项 ==============\033[0m"
 rpm_num=$(rpm -qa | wc -l)
 echo "操作系统中安装的程序包和组件共${rpm_num}项。"
-echo -e "\033[33m[*] 请使用rpm -qa或者yum list installed命令来核查安装的软件包是否是必须的。 \033[0m"
+if [ "$1" == "low" ];then
+	echo -e "\033[33m[*] 使用了low参数，将不打印已安装的软件包列表。 \033[0m"
+else
+	rpm -qa
+fi
 
 echo -e "\n\033[34m[*] 入侵防范 b)项 ==============\033[0m"
 echo -e "\033[33m[*] 请核查是否开启了不必要的服务。 \033[0m"
@@ -574,6 +580,7 @@ cat /etc/audit/audit-stop.rules 2>/dev/null >> ./res_config.log
 echo "==============/etc/audit/rules.d/audit.rules==============" >> ./res_config.log
 cat /etc/audit/rules.d/audit.rules 2>/dev/null >> ./res_config.log
 echo "==============当前系统时间==============" >> ./res_config.log
+(ping time.tianqi.com -c 3 &>/dev/null) && (curl -H 'Accept-Language: zh-CN,zh;q=0.9,ko;q=0.8' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' time.tianqi.com 2>/dev/null | grep -o "北京现在时间：\(.*\)。查" | sed 's/。查//') >> ./res_config.log
 echo "当前系统时间：$(date +"%Y-%m-%d %H:%M:%S")" 2>/dev/null >> ./res_config.log
 echo "==============/var/log/audit/audit.log最后20行内容==============" >> ./res_config.log
 tail -20 /var/log/audit/audit.log 2>/dev/null >> ./res_config.log
